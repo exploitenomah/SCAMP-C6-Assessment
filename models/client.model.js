@@ -1,23 +1,22 @@
 
 
 const  mongoose = require('mongoose');
+const { createCustomError } = require('../utils/app.utils')
 
 const clientSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Please provide the client\'s name.'],
-    unique: [true, 'A client already exists with that name']
   },
   email: {
     type: String,
-    unique: [true, 'An client already exists with that email.'],
     required: [true, 'Please provide the client\'s  email']
   },
   address: {
     type: String,
     required: [true, 'Please provide client\'s address']
   },
-  user: {
+  supplier: {
     type: mongoose.SchemaTypes.ObjectId,
     required: [true, 'Please provide the user this client belongs to!']
   },
@@ -25,6 +24,12 @@ const clientSchema = new mongoose.Schema({
     type: Date, 
     default: Date.now
   }
+})
+
+clientSchema.pre('save', async function(next) {
+  const exists = await this.constructor.find({name: this.name, email: this.email, supplier: this.supplier})
+  if(exists.length > 0) next(createCustomError(400, 'Client already exists'))
+  next()
 })
 const Client = new mongoose.model('Client', clientSchema)
 

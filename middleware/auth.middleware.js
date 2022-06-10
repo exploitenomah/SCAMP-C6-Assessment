@@ -25,6 +25,6 @@ module.exports.authorize = async (req, res, next) => {
   if(!token) return next(createCustomError(401, 'Unauthorized!!!'))
   const authorized = decodeToken(token, next)
   if(!authorized) return next(createCustomError(401, 'Unauthorized!!!'))
-  req.user = await User.findOne({id: authorized})
+  req.user = await User.findOne({_id: authorized})
   next()
 }

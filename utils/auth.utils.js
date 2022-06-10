@@ -31,7 +31,6 @@ module.exports.generateToken = (payload, next) => {
 }
 
 module.exports.decodeToken = (payload, next) => {
-  console.log(payload, SECRET)
   return jwt.decode(SECRET, payload, (err, decoded) => {
     if(err)return next(createCustomError(500, err.message))
     return decoded
