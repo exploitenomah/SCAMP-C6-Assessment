@@ -8,8 +8,8 @@ module.exports.createCustomError = (status, message) => {
 
 module.exports.editFields = (obj1, obj2, fields) => {
   fields.forEach(field => {
-    const o0 = field[0]
-    const o1 = field[1]
-    obj1[o0] = obj2[o1]
+    const f0 = field[0]
+    const f1 = field[1]
+    obj1[f0] = obj2[f1]
   })
 }
