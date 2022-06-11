@@ -2,7 +2,7 @@
 const Client = require('../models/client.model')
 const Invoice = require('../models/invoice.model')
 const { asyncHelper } = require('../utils/async.utils')
-const { editFields,  createCustomError, getMailer } = require('../utils/app.utils')
+const { editFields,  createCustomError, sendEmail, createResponse } = require('../utils/app.utils')
 
 
 module.exports.attachUserToClient = asyncHelper( async (req, _, next) => {
@@ -27,13 +27,11 @@ module.exports.populateInvoice = asyncHelper( async( req, _, next ) => {
   .populate({path: 'supplier', select: '-__v -createdAt'})
   .populate({path: 'client', select: '-__v -createdAt, -supplier'})
   req.invoice = invoice
-  console.log(invoice)
   next()
 })
 
 module.exports.sendInvoiceMail = asyncHelper( async(req, res, next) => {
   const { invoice } = req
-  // console.log(invoice)
   if(!Object.values(invoice.supplier.address)[0]) return next(createCustomError(400, 'Please provide your address before sending an invoice'))
   const mailOptions = {
     from: req.user.email,
@@ -41,14 +39,9 @@ module.exports.sendInvoiceMail = asyncHelper( async(req, res, next) => {
     subject: `Invoice for ${invoice.service}`
   }
   const options = {invoice, title: `Invoice for ${invoice.service}`}
-  const invoiceMailer = getMailer(mailOptions, 'invoice.template', options, {})
-  const emailSent = await invoiceMailer.generateTxtAndHTML().sendEmail()
-  if(emailSent.response === 'success'){
-    return res.status(200).json({
-      status: 'success',
-      message: 'Email sent successfully'
-    })
-  }else{
-    next(createCustomError(500, 'error'))
-  }
+  await sendEmail(mailOptions, 'invoice.template', options, {})
+  return createResponse(res, 200, {
+    status: 'success',
+    message: 'Invoice sent successfully'
+  })
 })

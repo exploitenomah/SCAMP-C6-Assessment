@@ -15,6 +15,11 @@ module.exports.editFields = (obj1, obj2, fields) => {
   })
 }
 
-module.exports.getMailer = (mailOptions, template, options, locals) => {
-  return new EmailHandler(mailOptions, template, options, locals)
+module.exports.sendEmail = async (mailOptions, template, options, locals) => {
+  return await new EmailHandler(mailOptions, template, options, locals).generateTxtAndHTML().sendEmail()
+}
+module.exports.createResponse = (res, status, data) => {
+  return res.status(status).json({
+    data
+  })
 }

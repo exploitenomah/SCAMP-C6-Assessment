@@ -1,44 +1,65 @@
 extends email.layout.pug
 
 mixin address(address)
-  div
-    span=address.street 
-    span=address.city 
-    span=address.addressLine
+  div.address
+    p=address.street 
+    p=address.city 
+    p=address.addressLine
 block link
   include _invoice.style.pug
     
 block content
   header.header
     table
-      tr #{invoice.supplier.name} 
-      tr Invoice
+      tr 
+        th
+        th 
+        th 
+        th
       tr
-        td=`invoice ${invoice._id}`
-        td=invoice.client.name
-      tr=`Issued at: ${new Date(invoice.createdAt).toDateString()}`
-      tr
-        +address(invoice.client.billingAddress)
-        +address(invoice.supplier.address)
+        td.uc.text-lg Invoice
+        td
+        td
+        td.text-md Issued at: #{new Date(invoice.createdAt).toDateString()}
+      tr.invoice-number
+        td Invoice Number: #{invoice._id}     
+      tr 
 
-  h3 Purchase Details
-  table 
-    tr 
-      th #
-      th description
-      th quantity 
-      th unit price
-      th total
-      each product, index in invoice.products
-        tr 
-          td=index + 1
-          td=product.description 
-          td=product.quantity 
-          td=product.unitPrice 
-          td=product.total
-  table 
-    tr Gross total 
-    tr=invoice.total
+        td.capitalize.text-md.address
+          h3.capitalize.text-md #{invoice.supplier.name}           
+          +address(invoice.supplier.address)        
+        td
+        td.capitalize.text-md.address
+         h3.capitalize.text-md  #{invoice.client.name}  
+         | Billing Address
+         +address(invoice.client.billingAddress)
+        td 
+        td
+        td
+  p.date Payment Due At: #{invoice.paymentDueat}
+
+  main.main
+    h3 Purchase Details
+    table.my-lg.text-center.table
+      tr
+        th.th #
+        th.th description
+        th.th quantity 
+        th.th unit price
+        th.th total
+        each product, index in invoice.products
+          tr 
+            td.td=index + 1
+            td.td=product.description 
+            td.td=product.quantity 
+            td.td=product.unitPrice 
+            td.td=product.total
+      tr 
+        td.td Gross total 
+        td.td
+        td.td
+        td.td
+        td.td=invoice.total
         
 block foot 
-    a(href="http://") invoice pdf
+    a.button.payment-button(href="/") Make Payment

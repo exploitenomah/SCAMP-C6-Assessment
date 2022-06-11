@@ -43,10 +43,7 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       transporter.sendMail(this.mailOptions, (err, info) => {
         if (err) {
-          reject({
-            response: 'failed',
-            error: err
-          })
+          reject(err)
         } else {
           resolve({
             response: 'success',
