@@ -12,9 +12,19 @@ const clientSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please provide the client\'s  email']
   },
-  address: {
-    type: String,
-    required: [true, 'Please provide client\'s address']
+  billingAddress: {
+    street: {
+      type: String,
+      required: [true, 'Please provide client\'s address']
+    },
+    city: {
+      type: String,
+      required: [true, 'Please provide client\'s address']
+    },
+    addressLine: {
+      type: String,
+      required: [true, 'Please provide client\'s address']
+    }
   },
   supplier: {
     type: mongoose.SchemaTypes.ObjectId,

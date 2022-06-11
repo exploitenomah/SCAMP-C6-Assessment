@@ -1,0 +1,44 @@
+extends email.layout.pug
+
+mixin address(address)
+  div
+    span=address.street 
+    span=address.city 
+    span=address.addressLine
+block link
+  include _invoice.style.pug
+    
+block content
+  header.header
+    table
+      tr #{invoice.supplier.name} 
+      tr Invoice
+      tr
+        td=`invoice ${invoice._id}`
+        td=invoice.client.name
+      tr=`Issued at: ${new Date(invoice.createdAt).toDateString()}`
+      tr
+        +address(invoice.client.billingAddress)
+        +address(invoice.supplier.address)
+
+  h3 Purchase Details
+  table 
+    tr 
+      th #
+      th description
+      th quantity 
+      th unit price
+      th total
+      each product, index in invoice.products
+        tr 
+          td=index + 1
+          td=product.description 
+          td=product.quantity 
+          td=product.unitPrice 
+          td=product.total
+  table 
+    tr Gross total 
+    tr=invoice.total
+        
+block foot 
+    a(href="http://") invoice pdf

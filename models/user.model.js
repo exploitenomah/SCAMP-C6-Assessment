@@ -22,7 +22,20 @@ const userSchema = new mongoose.Schema({
     type: Date, 
     default: Date.now
   },
-  address: String,
+  address: {
+    street: {
+      type: String,
+      required: [true, 'Please provide address']
+    },
+    city: {
+      type: String,
+      required: [true, 'Please provide address']
+    },
+    addressLine: {
+      type: String,
+      required: [true, 'Please provide address']
+    }
+  },
   emailConfirmToken: String,
   passwordResetToken: String,
 })

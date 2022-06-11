@@ -1,4 +1,5 @@
 
+const EmailHandler = require('./email.utils')
 
 const { CustomError } = require('./error.utils')
 
@@ -12,4 +13,8 @@ module.exports.editFields = (obj1, obj2, fields) => {
     const f1 = field[1]
     obj1[f0] = obj2[f1]
   })
+}
+
+module.exports.getMailer = (mailOptions, template, options, locals) => {
+  return new EmailHandler(mailOptions, template, options, locals)
 }
