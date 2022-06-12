@@ -5,7 +5,6 @@
 
 const  mongoose = require('mongoose');
 
-
 const productSchema = new mongoose.Schema({
   description:{
     type: String,
@@ -61,12 +60,17 @@ const invoiceSchema = new mongoose.Schema({
   },
   paymentDueAt: {
     type: Date,
-    required: [true, 'Please specify the due date for payment']
+    required: [true, 'Please specify the due date for payment'],
+    min: new Date().getTime() + (86400000 * 25)
   },
   createdAt: {
     type: Date, 
     default: Date.now
-  }
+  },
+  lastReminder: Date,
+  isPaid: Boolean,
+  paidAt: Date,
+
 }, {
   toJSON: {
     virtuals: true
@@ -81,7 +85,6 @@ invoiceSchema.virtual('total').get(function(){
     prev.total + current.total
   ))
 })
-
 const Invoice = new mongoose.model('Invoice', invoiceSchema)
 
 

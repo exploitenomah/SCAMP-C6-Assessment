@@ -36,7 +36,7 @@ block content
         td 
         td
         td
-  p.date Payment Due At: #{invoice.paymentDueat}
+  p.date Payment Due At: #{new Date(invoice.paymentDueAt).toDateString()}
 
   main.main
     h3 Purchase Details
