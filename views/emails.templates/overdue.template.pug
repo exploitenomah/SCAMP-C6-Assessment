@@ -1,0 +1,29 @@
+
+
+extends email.layout.pug
+
+block link
+  include _invoice.style.pug
+
+block content
+  header.header
+    table
+      tr
+        p.paragraph Hello #{invoice.client.name.split(' ')[0]},
+
+      tr
+        p.paragraph I took a look at our records today and noticed that we're still waiting to receive payment from you for your invoice #{invoice._id}.
+
+      tr
+        p.paragraph Your invoice with us was due on #{(new Date(invoice.paymentDueAt)).toISOString().split('T')[0]}. Since that day has passed, your account balance with us is now considered overdue.
+
+      tr
+        p.paragraph Don't worry, this doesn't mean you've incurred any additional fees yet.
+      tr
+        p.paragraph You can pay your invoice here.
+          a.block.button.payment-button(href="/") Make Payment
+
+      tr
+        p.paragraph Warm Regards,
+      tr
+        p.paragraph #{invoice.supplier.name.split(' ')[0]}

@@ -1,6 +1,7 @@
 
 const { createCustomError } = require('./app.utils')
 
+
 module.exports.asyncHelper = (asyncFn) => {
   return async (req, res, next) => {
     try{
@@ -19,6 +20,15 @@ module.exports.singArgAsync = (asyncFn) => {
       const status = error.status || 500
       const message = error.message || 'Internal server error.'
         next(createCustomError(status, message))
+    }
+  }
+}
+module.exports.noArgAsync = (asyncFn) => {
+  return async () => {
+    try {
+      await asyncFn()
+    }catch(err){
+      console.log(err, 'No Arg Async')
     }
   }
 }

@@ -2,7 +2,7 @@
 const Client = require('../models/client.model')
 const Invoice = require('../models/invoice.model')
 const { asyncHelper, singArgAsync } = require('../utils/async.utils')
-const { editFields,  createCustomError, sendEmail, createResponse } = require('../utils/app.utils')
+const { editFields,  createCustomError, sendEmail, createResponse, emailInvoice } = require('../utils/app.utils')
 
 
 const attachUserToClient = asyncHelper( async (req, _, next) => {
@@ -30,20 +30,11 @@ const populateInvoice = singArgAsync( async( id, next ) => {
 const sendInvoiceMail = asyncHelper( async(req, res, next) => {
   const { invoiceId } = req
   const invoice = await populateInvoice(invoiceId, next)
-  if(!Object.values(invoice.supplier.address)[0]) return next(createCustomError(400, 'Please provide your address before sending an invoice'))
-  const mailOptions = {
-    from: req.user.email,
-    to: invoice.client.email,
-    subject: `Invoice for ${invoice.service}`
-  }
-  const options = {invoice, title: `Invoice for ${invoice.service}`}
-  await sendEmail(mailOptions, 'invoice.template', options, {})
-  invoice.lastReminder = Date.now()
-  await invoice.save({validateBeforeSave: false})
-  return createResponse(res, 200, {
+  const message = await emailInvoice(invoice, 'invoice.template')
+  createResponse(res, 200, {
     status: 'success',
-    message: 'Invoice sent successfully'
-  })
+    message
+  }) 
 })
 
 module.exports = {

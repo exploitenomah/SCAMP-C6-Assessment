@@ -5,6 +5,3 @@ const { createDocument } = require('../utils/factory.utils')
 
 
 module.exports.createClient = createDocument(Client, [])
-
-module.exports.sendClientInvoice = asyncHelper((req, res, next) => {
-})

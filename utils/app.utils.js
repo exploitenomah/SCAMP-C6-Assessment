@@ -14,10 +14,25 @@ module.exports.editFields = (obj1, obj2, fields) => {
     obj1[f0] = obj2[f1]
   })
 }
-
-module.exports.sendEmail = async (mailOptions, template, options, locals) => {
+const sendEmail = async (mailOptions, template, options, locals) => {
   return await new EmailHandler(mailOptions, template, options, locals).generateTxtAndHTML().sendEmail()
 }
+module.exports.sendEmail = sendEmail
+
+const emailInvoice = async (invoice, template) => {
+  const mailOptions = {
+    from: invoice.supplier.email,
+    to: invoice.client.email,
+    subject: `Invoice for ${invoice.service}`
+  }
+  const options = {invoice, title: `Invoice for ${invoice.service}`}
+  await sendEmail(mailOptions, template, options, {})
+  invoice.lastReminder = Date.now()
+  await invoice.save({validateBeforeSave: false})
+  return {message: 'Invoice sent successfully.'}
+} 
+module.exports.emailInvoice = emailInvoice
+
 module.exports.createResponse = (res, status, data) => {
   return res.status(status).json({
     data

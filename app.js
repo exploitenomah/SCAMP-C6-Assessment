@@ -5,22 +5,22 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const dotenv = require('dotenv')
 dotenv.config({path: './.env'})
-const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users.route');
 const clientsRouter = require('./routes/clients.route')
 const invoicesRouter = require('./routes/invoices.route')
 const ErrorHandler = require('./middleware/error.middleware')
 const { createResponse } = require('./utils/response.utils')
+const { dailyAt8Job } = require('./cron/cron')
+const { autoSendInvoicesJob }  = require('./jobs/invoice.jobs')
+
 
 const app = express();
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
+dailyAt8Job(autoSendInvoicesJob)
 app.use('/users', usersRouter);
 app.use('/clients', clientsRouter)
 app.use('/invoices', invoicesRouter)
