@@ -1,0 +1,28 @@
+# This is a basic workflow that is manually triggered
+
+name: Create envfile
+
+on: [push]
+
+jobs:
+
+  create-envfile:
+ 
+    runs-on: ubuntu-18.04
+ 
+    steps:
+    - name: Make envfile
+      uses: SpicyPizza/create-envfile@v1
+      with:
+        envkey_DB_DEV: mongodb://localhost:27017/invoice_db
+        envkey_PORT: 8000
+        envkey_NODE_ENV: dev 
+        envKey_MAILTRAP_EMAIL: haleythomashat@gmail.com
+        envKey_MAILTRAP_PASSWORD: password
+        envKey_EMAIL_HOST_DEV: smtp.mailtrap.io 
+        envKey_EMAIL_PORT_DEV: 2525 
+        envKey_ EMAIL_USER_DE: 7a08b3b958456
+        envKey_EMAIL_PASS_DEV: 44cb2835f9cec6
+        envKey_BCRYPT_SALT: 10
+        envKey_JWT_SECRET: TeRcEsRuPesYlLaEr
+        file_name: .env
