@@ -3,7 +3,7 @@ const User = require('../models/user.model')
 const { asyncHelper } = require('../utils/async.utils')
 const { compareHash, generateToken, decodeToken } = require('../utils/auth.utils')
 const { createCustomError } = require('../utils/app.utils')
-const { createResponse } = require('../utils/response.utils')
+const { createResponse } = require('../utils/app.utils')
 
 module.exports.authenticate = asyncHelper( async (req, res, next) => {
   const { email, password } = req.body
@@ -25,6 +25,8 @@ module.exports.authorize = async (req, res, next) => {
   if(!token) return next(createCustomError(401, 'Unauthorized!!!'))
   const authorized = decodeToken(token, next)
   if(!authorized) return next(createCustomError(401, 'Unauthorized!!!'))
-  req.user = await User.findOne({_id: authorized})
+  const user = await User.findOne({_id: authorized})
+  if(!user) return next(createCustomError(401, 'Unauthorized'))
+  req.user = user
   next()
 }

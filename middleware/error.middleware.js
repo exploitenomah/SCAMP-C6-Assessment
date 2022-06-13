@@ -1,17 +1,11 @@
 
 
 
-const { createResponse } = require('../utils/response.utils')
+const { createResponse } = require('../utils/app.utils')
 const ErrorHandler = (err, req, res, next) => {
 
-  let message = err.message
+  let message = err.message || 'An unknown error occured!'
   let status = err.status || 500
-  console.log(err)
-  if(err.type === 'ValidationError')console.log('err')
-  // if(err.message.startsWith("E11000")) {
-  //  status = 400
-  //  message = message
-  // }
   createResponse(res, status, {message})
 }
 

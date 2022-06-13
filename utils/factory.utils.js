@@ -1,6 +1,6 @@
 
 const { asyncHelper } = require('./async.utils')
-const { createResponse } = require('./response.utils')
+const { createResponse } = require('./app.utils')
 
 module.exports.createDocument = (Model, excludedFields) => {
   return asyncHelper( async (req, res, next) => {

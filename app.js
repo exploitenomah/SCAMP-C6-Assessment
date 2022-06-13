@@ -9,7 +9,7 @@ const usersRouter = require('./routes/users.route');
 const clientsRouter = require('./routes/clients.route')
 const invoicesRouter = require('./routes/invoices.route')
 const ErrorHandler = require('./middleware/error.middleware')
-const { createResponse } = require('./utils/response.utils')
+const { createResponse } = require('./utils/app.utils')
 const { dailyAt8Job } = require('./cron/cron')
 const { autoSendInvoicesJob }  = require('./jobs/invoice.jobs')
 

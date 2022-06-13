@@ -6,7 +6,11 @@ const { CustomError } = require('./error.utils')
 module.exports.createCustomError = (status, message) => {
   return new CustomError(status, message)
 }
-
+module.exports.createResponse = (res, status, data) => {
+  return res.status(status).json({
+    data
+  })
+}
 module.exports.editFields = (obj1, obj2, fields) => {
   fields.forEach(field => {
     const f0 = field[0]
