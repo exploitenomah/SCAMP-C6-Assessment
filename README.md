@@ -24,7 +24,7 @@ EMAIL_PORT_DEV=<email_port>
 EMAIL_USER_DEV=<email_user>
 EMAIL_PASS_DEV=<email_pass>
 
-BCRYPT_SALT=10>
+BCRYPT_SALT=<salt_number>
 JWT_SECRET=<whatever secret you'd like>
 ```
 
